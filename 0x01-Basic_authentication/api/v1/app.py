@@ -24,7 +24,7 @@ elif AUTH_TYPE == 'basic_auth':
     auth = BasicAuth()
 
 
-@qpp.before_requestt
+@app.before_request
 def before_request():
     """handler to filter requests"""
     if auth is None:
