@@ -9,7 +9,7 @@ import os
 
 
 # Route for user login with session authentication
-@app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
+@app_views.route('/api/v1/auth_session/login', methods=['POST'], strict_slashes=False)
 def session_auth():
     '''
         method for handling session authentification
@@ -50,7 +50,7 @@ def session_auth():
 
 
 # Route for user logout with session authentication
-@app_views.route('/auth_session/logout',
+@app_views.route('/api/v1/auth_session/logout',
                  methods=['DELETE'], strict_slashes=False)
 def logout():
     '''
