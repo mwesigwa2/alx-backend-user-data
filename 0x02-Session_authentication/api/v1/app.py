@@ -22,6 +22,9 @@ if AUTH_TYPE == 'auth':
 elif AUTH_TYPE == 'basic_auth':
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
+elif AUTH_TYPE == 'session_auth':
+    from api.v1.auth.session_auth import SessionAuth
+    auth = SessionAuth()
 
 
 @app.before_request
@@ -31,11 +34,12 @@ def before_request():
         pass
     else:
         request.current_user = auth.current_user(request)
-        excluded_list = ['/api/v1/status/',
+        excluded_list = ['/api/v1/status/', '/api/v1/auth_session/login/',
                          '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
         if auth.require_auth(request.path, excluded_list):
-            if auth.authorization_header(request) is None:
+            cookie = auth.session_cookie(request)
+            if auth.authorization_header(request) is None and cookie is None:
                 abort(401, description="Unauthorized")
             if auth.current_user(request) is None:
                 abort(403, description='Forbidden')
@@ -55,7 +59,7 @@ def unauthorized(error) -> str:
 
 
 @app.errorhandler(403)
-def forbidden(error) -> str:
+def forbidden_access(error) -> str:
     """Forbidden handler"""
     return jsonify({"error": "Forbidden"}), 403
 
