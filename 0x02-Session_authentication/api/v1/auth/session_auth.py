@@ -5,6 +5,7 @@
 from api.v1.auth.auth import Auth
 from models.user import User
 from uuid import uuid4
+from typing import TypeVar
 
 
 class SessionAuth(Auth):
@@ -47,7 +48,7 @@ class SessionAuth(Auth):
             return None
         return str(self.user_id_by_session_id.get(session_id))
 
-    def current_user(self, request=None):
+    def current_user(self, request=None) -> TypeVar('User'):
         '''
             returns a User instance based on a cookie value:
 
@@ -60,7 +61,7 @@ class SessionAuth(Auth):
         user = User.get(user_id)
         return user
 
-    def destroy_session(self, request=None):
+    def destroy_session(self, request=None) -> bool:
         '''
 
             deletes the user session / logout:
