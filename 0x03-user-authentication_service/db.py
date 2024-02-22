@@ -42,3 +42,17 @@ class DB:
         self._session.commit()
 
         return new_user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        '''
+            function that updates user's details
+        '''
+        found_user = self.find_user_by(id=user_id)
+
+        for key, value in kwargs.items():
+            if not hasattr(found_user, key):
+                raise ValueError
+            setattr(found_user, key, value)
+
+        self._session.commit()
+        return None
